@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 import { ENV_CONFIG } from '../config/env.config';
+import { JWTService } from '../services/jwt.service';
 
 interface AuthRequest extends Request {
   user?: any;
@@ -15,7 +15,7 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction) 
       throw new Error();
     }
 
-    const decoded = jwt.verify(token, ENV_CONFIG.JWT_SECRET);
+    const decoded = JWTService.verifyToken(token);
     const user = await User.findOne({ _id: (decoded as any)._id });
 
     if (!user) {

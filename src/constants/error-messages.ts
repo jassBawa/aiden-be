@@ -8,4 +8,6 @@ export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: 'Invalid credentials',
   INSUFFICIENT_TOKENS: 'Insufficient token balance',
   OPENAI_API_ERROR: 'OpenAI API Error',
+  USER_NOT_REGISTERED: 'Email not registered',
+  INVALID_TOKEN: "Invalid JWT Token"
 } as const; 

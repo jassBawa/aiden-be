@@ -1,13 +1,13 @@
 import express from 'express';
-import { auth } from '../middleware/auth';
+// import { auth } from '../middleware/auth';
 import { ChatController } from '../controllers/chat.controller';
-import { globalRateLimiter } from '../config/rate-limit.config';
+import { auth } from '../middleware/auth';
 
 const router = express.Router();
 
 // chat middlewares
 router.use(auth);
-router.use(globalRateLimiter);
+// router.use(globalRateLimiter);
 
 /**
  * @swagger

@@ -16,12 +16,16 @@ interface AuthRequest extends Request {
 export class ChatController {
   static async getAllChats(req: AuthRequest, res: Response) {
     try {
-      const chats = await Chat.find({ user: req.user?._id })
+      const chats = await Chat.find({
+        user: req.user?._id,
+      })
         .sort({ updatedAt: -1 })
         .select('_id lastMessage updatedAt');
-      res.json({conversations: chats});
+      res.json({ conversations: chats });
     } catch (error) {
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+      res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
 
@@ -42,7 +46,6 @@ export class ChatController {
 
       const userMessageTokens = calculateTokens(message);
 
-
       if (user.tokenBalance < userMessageTokens) {
         res.status(HTTP_STATUS.FORBIDDEN).json({
           error: ERROR_MESSAGES.INSUFFICIENT_TOKENS,
@@ -58,39 +61,22 @@ export class ChatController {
       });
 
       const aiResponse = completion.choices[0].message.content;
-      const totalTokensUsed = completion.usage?.total_tokens ?? 0;
 
-      if (user.tokenBalance < totalTokensUsed) {
-        res.status(HTTP_STATUS.FORBIDDEN).json({
-          error: ERROR_MESSAGES.INSUFFICIENT_TOKENS,
-          requiredTokens: totalTokensUsed,
-          remainingTokens: user.tokenBalance,
-        });
-        // ideally here we should make the tokens 0 
-        return;
-      }
-
-      user.tokenBalance -= totalTokensUsed;
+      user.tokenBalance -= userMessageTokens;
       await user.save();
 
       const chat = new Chat({
         user: req.user?._id,
         lastMessage: message.substring(0, 50),
         messages: [
-          {
-            role: 'user',
-            content: message,
-            tokens: userMessageTokens,
-            timestamp: new Date(),
-          },
+          { role: 'user', content: message, timestamp: new Date() },
           {
             role: 'assistant',
             content: aiResponse || '',
-            tokens: totalTokensUsed - userMessageTokens,
             timestamp: new Date(),
           },
         ],
-        totalTokensUsed,
+        totalTokensUsed: userMessageTokens,
       });
 
       await chat.save();
@@ -100,9 +86,10 @@ export class ChatController {
         conversationId: chat._id,
         tokens: {
           remainingTokens: user.tokenBalance,
-          tokensUsed: totalTokensUsed,
+          tokensUsed: userMessageTokens,
         },
       });
+      return;
     } catch (error: any) {
       console.error('Chat Error:', error);
 
@@ -116,8 +103,10 @@ export class ChatController {
 
       res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
         error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        details: ENV_CONFIG.NODE_ENV === 'development' ? error.message : undefined,
+        details:
+          ENV_CONFIG.NODE_ENV === 'development' ? error.message : undefined,
       });
+      return;
     }
   }
 
@@ -129,7 +118,9 @@ export class ChatController {
       });
 
       if (!chat) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({ error: ERROR_MESSAGES.NOT_FOUND });
+        res
+          .status(HTTP_STATUS.NOT_FOUND)
+          .json({ error: ERROR_MESSAGES.NOT_FOUND });
         return;
       }
 
@@ -140,11 +131,12 @@ export class ChatController {
         currentTokenBalance: user?.tokenBalance,
       });
     } catch (error) {
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+      res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
-  
-} 
+}
 
 function calculateTokens(text: string): number {
   const enc = encoding_for_model(ENV_CONFIG.OPENAI_MODEL as TiktokenModel);

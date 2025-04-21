@@ -12,6 +12,6 @@ export class JWTService {
   }
 
   static verifyToken(token : string): JWTPayload {
-    return jwt.verify(token, ENV_CONFIG.JWT_EXPIRES_IN)as JWTPayload;
+    return jwt.verify(token, ENV_CONFIG.JWT_SECRET as Secret) as JWTPayload;
   }
 } 

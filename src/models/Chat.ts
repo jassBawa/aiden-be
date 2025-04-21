@@ -6,7 +6,6 @@ export interface IChat extends Document {
     role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
-    tokens?: number;
   }[];
   lastMessage: string;
   createdAt: Date;
@@ -29,10 +28,6 @@ const chatSchema = new Schema<IChat>({
     content: {
       type: String,
       required: true,
-    },
-    tokens: {
-      type: Number,
-      default: 0,
     },
     timestamp: {
       type: Date,

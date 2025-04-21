@@ -36,7 +36,7 @@ export class AuthController {
 
       const user = await UserService.findUserByEmail(email);
       if (!user) {
-        return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: ERROR_MESSAGES.INVALID_CREDENTIALS });
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json({ error: ERROR_MESSAGES.USER_NOT_REGISTERED });
       }
 
       const isMatch = await user.comparePassword(password);

@@ -4,7 +4,7 @@ import {globalRateLimiter} from '../config/rate-limit.config';
 
 
 const router = express.Router();
-router.use(globalRateLimiter);
+// router.use(globalRateLimiter);
 
 
 /**
