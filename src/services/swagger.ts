@@ -1,3 +1,4 @@
+import { ENV_CONFIG } from '@/config/env.config';
 import swaggerJSDoc from 'swagger-jsdoc';
 
 const options: swaggerJSDoc.Options = {
@@ -10,7 +11,7 @@ const options: swaggerJSDoc.Options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: ENV_CONFIG.PROD_API_URL,
       },
     ],
   },

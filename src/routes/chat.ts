@@ -1,5 +1,5 @@
 import express from 'express';
-import { chatRateLimiter } from '@/config/rate-limit.config';
+import { chatRateLimiter } from '../config/rate-limit.config';
 import { ChatController } from '../controllers/chat.controller';
 import { auth } from '../middleware/auth';
 
