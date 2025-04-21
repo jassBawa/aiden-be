@@ -6,7 +6,7 @@
     "dev": "tsc -b && node dist/index.js",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest --runInBand"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,8 @@
     "@types/express": "^5.0.1",
     "@types/express-rate-limit": "^5.1.3",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -23,7 +25,12 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "openai": "^4.95.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "tiktoken": "^1.0.20",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }

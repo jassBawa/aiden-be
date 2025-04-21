@@ -6,6 +6,8 @@ import { logRequests } from './middleware/logger.middleware';
 import authRoutes from './routes/auth';
 import chatRoutes from './routes/chat';
 import { globalRateLimiter } from './config/rate-limit.config';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './services/swagger'
 
 
 dotenv.config();
@@ -17,11 +19,13 @@ app.use(express.json());
 app.use(logRequests);
 
 // Apply global rate limiting
-app.use(globalRateLimiter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 
 // Connect to MongoDB
 connectDB();
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -42,3 +46,5 @@ const PORT = ENV_CONFIG.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;

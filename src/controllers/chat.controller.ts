@@ -66,6 +66,7 @@ export class ChatController {
           requiredTokens: totalTokensUsed,
           remainingTokens: user.tokenBalance,
         });
+        // ideally here we should make the tokens 0 
         return;
       }
 
@@ -142,7 +143,6 @@ export class ChatController {
       res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
     }
   }
-
   
 } 
 
