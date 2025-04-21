@@ -138,7 +138,7 @@ export class ChatController {
   }
 }
 
-function calculateTokens(text: string): number {
+export function calculateTokens(text: string): number {
   const enc = encoding_for_model(ENV_CONFIG.OPENAI_MODEL as TiktokenModel);
   const tokenCount = enc.encode(text).length;
   enc.free();

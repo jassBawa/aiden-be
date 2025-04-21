@@ -1,5 +1,5 @@
 import express from 'express';
-// import { auth } from '../middleware/auth';
+import { chatRateLimiter } from '@/config/rate-limit.config';
 import { ChatController } from '../controllers/chat.controller';
 import { auth } from '../middleware/auth';
 
@@ -7,8 +7,7 @@ const router = express.Router();
 
 // chat middlewares
 router.use(auth);
-// router.use(globalRateLimiter);
-
+router.use(chatRateLimiter);
 /**
  * @swagger
  * openapi: 3.0.0
