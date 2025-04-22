@@ -7,11 +7,13 @@ import chatRoutes from './routes/chat';
 import { globalRateLimiter } from './config/rate-limit.config';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './services/swagger';
+import cors from 'cors';
 
 
 const app = express();
 
 // Middleware
+app.use(cors())
 app.use(express.json());
 app.use(logRequests);
 app.use(globalRateLimiter);
